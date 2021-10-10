@@ -42,7 +42,7 @@ public class Move : MonoBehaviour
         Vector3 size = new Vector3(s, s, 0);
         transform.localScale += size;
 
-        if(transform.position.x == start_pos.x || transform.position.y == start_pos.y) // reset the values;
+        if(transform.position.x == start_pos.x && transform.position.y == start_pos.y) // reset the values;
         {
             transform.localScale = new Vector3(1, 1, 1);
             transform.position = new Vector3(start_pos.x, start_pos.y, 0);
