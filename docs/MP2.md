@@ -2,9 +2,9 @@
 
 
 ## EC
-- Central Circle
-- Bar on Circle radius
-- Bar rotates around circle
+- ~~Central Circle~~
+- ~~Bar on Circle radius~~
+- ~~Bar rotates around circle~~
 - Randomly generate a circle on the perimeter of the larger circle
 - If the user presses space, the bar reverses direction
 - If the user presses space and the bar is on the target circle, increment the score
