@@ -1,21 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CameraBehaviour : MonoBehaviour
 {
-    private Camera cam;   // Will find this on the gameObject
-    public Bounds worldBounds;  // Computed bound from the camera
 
-    public int numEnemies = 0;
-    public int enemiesCreated = 0;
-
+    private Camera cam;
+    private StateManager stateManager;
+    public Bounds worldBounds;
     public Text text;
-    public GameObject Player;
-    public int numEggs;
-    PlayerBehaviour playerBehaviour;
-
+    
     void Awake()  // camera may be disabled by some in Start(), so init in Awake.
     {
         cam = gameObject.GetComponent<Camera>();
@@ -23,11 +16,7 @@ public class CameraBehaviour : MonoBehaviour
         worldBounds = new Bounds();
         UpdateWorldWindowBound();
 
-        for (int i = 0; i < 10; i++) instantiateEnemy();
-
-        playerBehaviour = Player.GetComponent<PlayerBehaviour>();
     }
-
 
     void Update()
     {
@@ -35,7 +24,7 @@ public class CameraBehaviour : MonoBehaviour
         UpdateText();
     }
 
-    private void UpdateWorldWindowBound()
+    public void UpdateWorldWindowBound()
     {
 
         float maxY = cam.orthographicSize;
@@ -51,29 +40,10 @@ public class CameraBehaviour : MonoBehaviour
 
     }
 
-    public bool BoundsContainsPointXY(Vector3 pt)
+    public bool pointInWorld(Vector3 pt)
     {
         return ((worldBounds.min.x < pt.x) && (worldBounds.max.x > pt.x) &&
                 (worldBounds.min.y < pt.y) && (worldBounds.max.y > pt.y));
-    }
-
-    public void instantiateEnemy()
-    {
-        numEnemies++;
-        enemiesCreated++;
-        Vector3 position = transform.position;
-
-        position.z = 0;
-
-        float delta = 0.05f * (worldBounds.max.x - worldBounds.min.x);
-        position.x = Random.Range(worldBounds.min.x + delta, worldBounds.max.x - delta);
-
-        delta = 0.05f * (worldBounds.max.y - worldBounds.min.y);
-        position.y = Random.Range(worldBounds.min.y + delta, worldBounds.max.y - delta);
-
-        GameObject e = Instantiate(Resources.Load("Prefabs/Enemy") as GameObject);
-        e.transform.position = position;
-        e.name = "Enemy";
     }
 
     private void UpdateText()

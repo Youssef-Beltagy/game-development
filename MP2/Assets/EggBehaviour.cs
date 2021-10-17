@@ -2,22 +2,23 @@ using UnityEngine;
 
 public class EggBehaviour : MonoBehaviour
 {
-    private static CameraBehaviour camBehaviour;
 
     float speed = 40;
 
+    private static StateManager stateManager = null;
+
     private void Start()
     {
-        camBehaviour = Camera.main.GetComponent<CameraBehaviour>();
-        camBehaviour.numEggs++;
         GetComponent<Rigidbody2D>().freezeRotation = true;
+
+        if(stateManager == null) stateManager = Camera.main.GetComponent<StateManager>();
     }
+
     private void Update()
     {
-        if (!camBehaviour.BoundsContainsPointXY(transform.position))
+        if (!stateManager.pointInWorld(transform.position))
         {
-            camBehaviour.numEggs--;
-            Destroy(gameObject);
+            stateManager.destroyEgg(gameObject);
             return;
         }
         
@@ -26,10 +27,9 @@ public class EggBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "Player") return;
+        if (collision.gameObject.name == Data.PLAYER_NAME) return;
 
-        camBehaviour.numEggs--;
-        Destroy(gameObject);
+        stateManager.destroyEgg(gameObject);
     }
 
 }

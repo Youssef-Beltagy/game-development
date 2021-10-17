@@ -5,33 +5,35 @@ using UnityEngine;
 public class EnemyBehaviour : MonoBehaviour
 {
     
-    public static CameraBehaviour camBehaviour;
+    private static StateManager stateManager;
     public int health = 4;
 
     private void Start()
     {
-        camBehaviour = Camera.main.GetComponent<CameraBehaviour>();
+        if (stateManager == null) stateManager = Camera.main.GetComponent<StateManager>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "Player")
+        if (collision.gameObject.name == Data.PLAYER_NAME)
         {
-            destroyAndRespwan();
+            destroyAndRespwan(collision.gameObject);
+            return;
         }
-        else if (collision.gameObject.name == "Egg"){
+        
+        
+        if (collision.gameObject.name == Data.EGG_NAME){
             health--;
             Color color = GetComponent<Renderer>().material.color;
             color.a *= 0.8f;
             GetComponent<Renderer>().material.color = color; 
-            if (health <= 0) destroyAndRespwan();
+            if (health <= 0) destroyAndRespwan(collision.gameObject);
         }
     }
 
-    private void destroyAndRespwan()
+    private void destroyAndRespwan(GameObject ga)
     {
-        camBehaviour.instantiateEnemy();
-        camBehaviour.numEnemies--;
-        Destroy(gameObject);
+        StateManager.instantiateEnemy();
+        StateManager.destroyEnemy(gameObject, ga);
     }
 }
