@@ -1,4 +1,6 @@
-# Learning Unity
+# Final Project
+
+## Learning Unity
 
 Approach: https://www.youtube.com/watch?v=vFjXKOXdgGo
 
@@ -10,10 +12,10 @@ I like tutorials that explain to me how the software works and how to use it. I 
 
 ## Design Guidelines
 
+Prototyping is important: https://www.youtube.com/watch?v=ZMbIvmv25u0
+
 - Break the game down to the smallest possible features
 - Think of the overall code design
-
-
 
 ## Questions
 
@@ -26,6 +28,14 @@ I like tutorials that explain to me how the software works and how to use it. I 
 - How to build levels?
 - Design patterns?
 - What are parent and child gameobjects?
+
+## Helpful Commands
+```shell
+# Clean The repository (Careful -- Hard resets -- Loses progress)
+git reset --hard head
+git clean -e Examples -f -d -x
+
+```
 
 ## TODO
 
