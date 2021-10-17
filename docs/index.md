@@ -1,4 +1,39 @@
 # Youssef's Game Development Projects
 
 - [MP1](MP1/)
-- [MP2](MP2/)
+- [MP2](MP2/) Here is the extra credit implemented
+  -  Major refactoring and cleanup (Experimenting with code organization)
+  -  Experimented with a new architecture:
+     -  Camera contains StateManager
+     -  State is Static -- Only one copy
+        -  Makes accessing the data trivial
+        -  Causes some data consistency issues
+     -  Any Instantiation or destruction is passed to a static function
+     -  State is reset in Awake to reset at every scene switch
+  -  Player:
+    - Limited Lives mode (Toggle by pressing 1)
+    - Bombs that can insta-kill a plane (Press 'B' to launch)
+      - Slower Cooldown
+      - Slower Movement Speed
+      - Incredibly destructive
+  - Enemy 2 (Activate by pressing 2):
+    - Has 3 life units
+    - changes color when hit (green, grey, red)
+    - Randomized chances of getting Enemy2
+  - Enemy 3 (Activate by pressing 3)
+    - Has 1 life unit
+    - Has trail
+    - Rotates around self
+    - Orbits around screen (Randomized speed and distance)
+    - Oscillates between screen and itself (Randomized) --> Makes circular waves
+    - Pressing space reverses rotation direction
+      - The game is not easy if you limit the number of lives and enable Enemy3
+  - Background: FigherJet from Pexels.com
+  - Second Scene:
+    - Hit space while the ball and bar collides to score a point
+    - Miss the ball and you lose a life (3 in total)
+    - Game over when you lose all lives
+    - Hit the space bar to reverse your direction
+    - Score and lives are printed at the top
+  - Switch between Scenes by pressing N
+  - Game Over Scene
