@@ -118,7 +118,7 @@ public class StateManager : MonoBehaviour
         if (playerLives > 0) return;
 
         Destroy(player);
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 
 }
