@@ -4,33 +4,36 @@ public class PlayerBehaviour : MonoBehaviour
 {
 
     private static Camera mainCamera;
-    private static StateManager stateManager;
 
     float speed;
 
-    public float spawnRate = 0.2f;
-    float lastSpawnTime;
+    public Timer eggTimer;
+    public Timer bombTimer;
 
     void Start()
     {
         mainCamera = Camera.main;
-        stateManager = mainCamera.GetComponent<StateManager>();
         GetComponent<Rigidbody2D>().freezeRotation = true;
 
         speed = 20;
-        lastSpawnTime = Time.time;
+        eggTimer = new Timer(0.2f);
+        bombTimer = new Timer(0.5f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if ((StateManager.playerMode & Data.PlayerMode.ALLON) == Data.PlayerMode.Mouse) setPositionToCursor();
-        if ((StateManager.playerMode & Data.PlayerMode.ALLON) == Data.PlayerMode.Keyboard) updatePosition();
+        if ((StateManager.playerMode & Data.PlayerMode.Mouse) != 0) setPositionToCursor();
+        else updatePosition();
 
-        if (Input.GetKey(KeyCode.Space) && Time.time > lastSpawnTime + spawnRate)
+        if (Input.GetKey(KeyCode.Space) && eggTimer.aquire())
         {
-            lastSpawnTime = Time.time;
-            mainCamera.GetComponent<StateManager>().instantiateEgg(transform.position + transform.up * (2 / transform.up.magnitude), transform.rotation);
+            StateManager.instantiateEgg(transform.position + transform.up * (2 / transform.up.magnitude), transform.rotation, false);
+        }
+
+        if (Input.GetKey(KeyCode.B) && bombTimer.aquire())
+        {
+            StateManager.instantiateEgg(transform.position + transform.up * (2 / transform.up.magnitude), transform.rotation, true);
         }
 
     }
@@ -47,6 +50,14 @@ public class PlayerBehaviour : MonoBehaviour
     {
         speed += Input.GetAxis("Vertical") * 0.2f;
         transform.position +=  transform.up * (speed * Time.deltaTime / transform.up.magnitude);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if (collision.gameObject.name != Data.ENEMY_NAME) return;
+
+        StateManager.playerCollision(gameObject);
     }
 
 }

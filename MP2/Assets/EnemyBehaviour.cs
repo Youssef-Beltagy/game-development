@@ -5,13 +5,8 @@ using UnityEngine;
 public class EnemyBehaviour : MonoBehaviour
 {
     
-    private static StateManager stateManager;
     public int health = 4;
-
-    private void Start()
-    {
-        if (stateManager == null) stateManager = Camera.main.GetComponent<StateManager>();
-    }
+    public bool changeColor = false;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -23,12 +18,22 @@ public class EnemyBehaviour : MonoBehaviour
         
         
         if (collision.gameObject.name == Data.EGG_NAME){
-            health--;
-            Color color = GetComponent<Renderer>().material.color;
-            color.a *= 0.8f;
-            GetComponent<Renderer>().material.color = color; 
-            if (health <= 0) destroyAndRespwan(collision.gameObject);
+            health -= (collision.gameObject.GetComponent<EggBehaviour>().damage);
         }
+
+        if (health <= 0)
+        {
+            destroyAndRespwan(collision.gameObject);
+            return;
+        }
+
+        Color color;
+        if (changeColor) color = Data.colors[2 - health];
+        else color = GetComponent<Renderer>().material.color;
+
+        color.a = GetComponent<Renderer>().material.color.a * 0.8f;
+
+        GetComponent<Renderer>().material.color = color;
     }
 
     private void destroyAndRespwan(GameObject ga)

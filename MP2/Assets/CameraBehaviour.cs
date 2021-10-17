@@ -5,7 +5,6 @@ public class CameraBehaviour : MonoBehaviour
 {
 
     private Camera cam;
-    private StateManager stateManager;
     public Bounds worldBounds;
     public Text text;
     
@@ -24,7 +23,7 @@ public class CameraBehaviour : MonoBehaviour
         UpdateText();
     }
 
-    public void UpdateWorldWindowBound()
+    private void UpdateWorldWindowBound()
     {
 
         float maxY = cam.orthographicSize;
@@ -49,11 +48,15 @@ public class CameraBehaviour : MonoBehaviour
     private void UpdateText()
     {
         
-        text.text =  " Hero touched: " + playerBehaviour.num_enemies_destroyed.ToString().PadRight(5, ' ');
-        text.text += " Eggs: " + numEggs.ToString().PadRight(5,' ');
-        text.text += " Enemies: " + numEnemies.ToString().PadRight(5, ' ');
-        text.text += " Enemies Destroyed: " + (enemiesCreated - numEnemies).ToString().PadRight(5,' ');
-        text.text += " Mode: " + playerBehaviour.player_mode.ToString().PadRight(20, ' ');
+        text.text =  "Hero Destroyed: " + StateManager.enemiesDestroyedByPlayer.ToString().PadRight(5, ' ');
+        text.text += "Eggs: " + StateManager.eggCount.ToString().PadRight(5,' ');
+        text.text += "Enemies: " + (StateManager.enemiesCreated - StateManager.enemiesDestroyed).ToString().PadRight(5, ' ');
+        text.text += "Enemies Destroyed: " + StateManager.enemiesDestroyed.ToString().PadRight(5,' ');
+        text.text += "Mode: " + (StateManager.playerMode & Data.PlayerMode.Mouse).ToString().PadRight(10, ' ');
+        text.text += "Lives: ";
+
+        if ((StateManager.playerMode & Data.PlayerMode.FewLives) != 0) text.text += StateManager.playerLives;
+        else text.text += "Infinite";
 
     }
 

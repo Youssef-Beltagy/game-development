@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StateManager : MonoBehaviour
 {
@@ -10,31 +9,47 @@ public class StateManager : MonoBehaviour
     public static int enemiesDestroyed = 0;
     public static int enemiesDestroyedByPlayer = 0;
     public static int eggCount = 0;
-    
+
+    public static int maxPlayerLives = 3;
+    public static int playerLives;
+
     private static CameraBehaviour cameraBehaviour;
 
     // Start is called before the first frame update
     void Awake()
     {
         cameraBehaviour = Camera.main.GetComponent<CameraBehaviour>();
-
-        // To guarantee the world bounds are initialized before instantiating enemies
-        cameraBehaviour.UpdateWorldWindowBound();
-        for (int i = 0; i < 10; i++) instantiateEnemy();
+        playerLives = maxPlayerLives;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M)) playerMode ^= Data.PlayerMode.Keyboard;
+        if (Input.GetKeyDown(KeyCode.M)) playerMode ^= Data.PlayerMode.Mouse;
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            playerMode ^= Data.PlayerMode.FewLives;
+            playerLives = maxPlayerLives;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2)) playerMode ^= Data.PlayerMode.EnableEnemy2;
+
+        if (Input.GetKeyDown(KeyCode.Alpha3)) playerMode ^= Data.PlayerMode.EnableEnemy3;
+
     }
 
-    public void instantiateEnemy()
+    private void Start()
+    {
+        for (int i = 0; i < 10; i++) instantiateEnemy();
+    }
+
+    public static void instantiateEnemy()
     {
         Bounds worldBounds = cameraBehaviour.worldBounds;
 
         enemiesCreated++;
-        Vector3 position = transform.position;
+        Vector3 position = new Vector3();
 
         position.z = 0;
 
@@ -43,40 +58,68 @@ public class StateManager : MonoBehaviour
 
         delta = 0.05f * (worldBounds.max.y - worldBounds.min.y);
         position.y = Random.Range(worldBounds.min.y + delta, worldBounds.max.y - delta);
-
-        GameObject e = Instantiate(Resources.Load("Prefabs/Enemy") as GameObject);
+        
+        GameObject e = Instantiate(Resources.Load(chooseEnemy()) as GameObject);
         e.transform.position = position;
         e.name = Data.ENEMY_NAME;
     }
 
-    public void instantiateEgg(Vector3 position, Quaternion orientation)
+    private static string chooseEnemy()
+    {
+        switch (((int)Random.Range(0, 9)) % 3)
+        {
+            case 0:
+                return "Prefabs/Enemy1";
+            case 1:
+                if((playerMode & Data.PlayerMode.EnableEnemy2) != 0) return "Prefabs/Enemy2";
+                break;
+            case 2:
+                if ((playerMode & Data.PlayerMode.EnableEnemy3) != 0) return "Prefabs/Enemy3";
+                break;
+        }
+        return "Prefabs/Enemy1";
+    }
+
+    public static void instantiateEgg(Vector3 position, Quaternion orientation, bool bomb)
     {
         eggCount++;
-        GameObject e = Instantiate(Resources.Load("Prefabs/Egg") as GameObject);
+        string eggType = "Prefabs/Egg";
+        if (bomb) eggType = "Prefabs/Bomb";
+        GameObject e = Instantiate(Resources.Load(eggType) as GameObject);
         e.transform.position = position;
         e.transform.rotation = orientation;
         e.name = Data.EGG_NAME;
     }
 
 
-    public void destroyEnemy(GameObject e, GameObject by)
+    public static void destroyEnemy(GameObject e, GameObject by)
     {
         enemiesDestroyed++;
         if (by.name == Data.PLAYER_NAME) enemiesDestroyedByPlayer++;
         Destroy(e);
     }
 
-    public void destroyEgg(GameObject e)
+    public static void destroyEgg(GameObject e)
     {
         eggCount--;
         Destroy(e);
     }
 
-    public bool pointInWorld(Vector3 point)
+    public static bool pointInWorld(Vector3 point)
     {
         return cameraBehaviour.pointInWorld(point);
     }
 
+    public static void playerCollision(GameObject player)
+    {
+        if ((StateManager.playerMode & Data.PlayerMode.FewLives) == 0) return;
+
+        playerLives--;
+        if (playerLives > 0) return;
+
+        Destroy(player);
+        SceneManager.LoadScene(1);
+    }
 
 }
 
