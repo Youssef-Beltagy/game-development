@@ -1,28 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class PlayerBehaviour : MonoBehaviour
 {
-    private enum PlayerMode
+    public enum PlayerMode
     {
         mouse = 0,
         keyboard = 1
     }
 
-    public Camera mainCamera;
-
+    public PlayerMode player_mode;
+    private Camera mainCamera;
     float speed;
 
-    private PlayerMode player_mode;
-
-    private Rigidbody2D rigid_body;
+    public float spawnRate = 0.2f;
+    public int num_enemies_destroyed = 0;
+    float lastSpawnTime;
 
     void Start()
     {
+        mainCamera = Camera.main;
         player_mode = PlayerMode.mouse;
-        rigid_body = GetComponent<Rigidbody2D>();
-        rigid_body.freezeRotation = true;
+        GetComponent<Rigidbody2D>().freezeRotation = true;
+        speed = 20;
+        lastSpawnTime = Time.time;
     }
 
     // Update is called once per frame
@@ -30,9 +30,18 @@ public class Player : MonoBehaviour
     {
         UpdatePlayerMode();
         if (player_mode == PlayerMode.mouse) setPositionToCursor();
-        if (player_mode == PlayerMode.keyboard) updateVelocity();
-    }
+        if (player_mode == PlayerMode.keyboard) updatePosition();
 
+        if (Input.GetKey(KeyCode.Space) && Time.time > lastSpawnTime + spawnRate)
+        {
+            lastSpawnTime = Time.time;
+            GameObject e = Instantiate(Resources.Load("Prefabs/Egg") as GameObject);
+            e.transform.position = transform.position + transform.up * (2 / transform.up.magnitude);
+            e.transform.rotation = transform.rotation;
+            e.name = "Egg";
+        }
+
+    }
 
     private void UpdatePlayerMode()
     {
@@ -46,7 +55,6 @@ public class Player : MonoBehaviour
         else
         {
             speed = 0;
-            rigid_body.velocity = new Vector2(0, 0);
             player_mode = PlayerMode.mouse;
         }
 
@@ -59,9 +67,14 @@ public class Player : MonoBehaviour
         transform.position = new_position;
     }
 
-    private void updateVelocity()
+    private void updatePosition()
     {
         speed += Input.GetAxis("Vertical") * 0.2f;
-        rigid_body.velocity = transform.up * (speed / transform.up.magnitude);
+        transform.position +=  transform.up * (speed * Time.deltaTime / transform.up.magnitude);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.name == "Enemy") num_enemies_destroyed++;
     }
 }
