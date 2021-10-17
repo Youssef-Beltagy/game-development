@@ -78,11 +78,12 @@ public class CameraBehaviour : MonoBehaviour
 
     private void UpdateText()
     {
-        text.text = "Mode: " + playerBehaviour.player_mode.ToString().PadRight(20,' ');
-        text.text += " Hero touched: " + playerBehaviour.num_enemies_destroyed.ToString().PadRight(5, ' ');
+        
+        text.text =  " Hero touched: " + playerBehaviour.num_enemies_destroyed.ToString().PadRight(5, ' ');
         text.text += " Eggs: " + numEggs.ToString().PadRight(5,' ');
         text.text += " Enemies: " + numEnemies.ToString().PadRight(5, ' ');
         text.text += " Enemies Destroyed: " + (enemiesCreated - numEnemies).ToString().PadRight(5,' ');
+        text.text += " Mode: " + playerBehaviour.player_mode.ToString().PadRight(20, ' ');
 
     }
 
