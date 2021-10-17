@@ -14,7 +14,7 @@ public class TargetBehavior : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        transform.RotateAround(rotateAround.transform.position, Vector3.forward, 30 + Random.value * 330);
+        transform.RotateAround(rotateAround.transform.position, Vector3.forward, 30 + Random.value * 300);
     }
 
 }

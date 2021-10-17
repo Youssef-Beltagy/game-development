@@ -11,6 +11,11 @@ public class ControllerCircleBehavior : MonoBehaviour
 
     public Text text;
 
+    private void Start()
+    {
+        score = 0;
+        numLives = 3;
+    }
 
     void Update()
     {

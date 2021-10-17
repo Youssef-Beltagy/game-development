@@ -18,6 +18,12 @@ public class StateManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        playerMode = Data.PlayerMode.Mouse;
+        enemiesCreated = 0;
+        enemiesDestroyed = 0;
+        enemiesDestroyedByPlayer = 0;
+        eggCount = 0;
+
         cameraBehaviour = Camera.main.GetComponent<CameraBehaviour>();
         playerLives = maxPlayerLives;
     }
