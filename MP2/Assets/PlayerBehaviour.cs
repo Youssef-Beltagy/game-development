@@ -22,13 +22,14 @@ public class Player : MonoBehaviour
     {
         player_mode = PlayerMode.mouse;
         rigid_body = GetComponent<Rigidbody2D>();
+        rigid_body.freezeRotation = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdatePlayerMode();
-        if(player_mode == PlayerMode.mouse) setPositionToCursor();
+        if (player_mode == PlayerMode.mouse) setPositionToCursor();
         if (player_mode == PlayerMode.keyboard) updateVelocity();
     }
 
@@ -36,7 +37,7 @@ public class Player : MonoBehaviour
     private void UpdatePlayerMode()
     {
         if (!Input.GetKeyDown(KeyCode.M)) return;
-        
+
         if (player_mode == PlayerMode.mouse)
         {
             speed = 20;
@@ -45,10 +46,10 @@ public class Player : MonoBehaviour
         else
         {
             speed = 0;
-            rigid_body.velocity = new Vector2(0,0);
+            rigid_body.velocity = new Vector2(0, 0);
             player_mode = PlayerMode.mouse;
         }
-            
+
     }
 
     private void setPositionToCursor()
@@ -63,10 +64,4 @@ public class Player : MonoBehaviour
         speed += Input.GetAxis("Vertical") * 0.2f;
         rigid_body.velocity = transform.up * (speed / transform.up.magnitude);
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        print("Collided");
-    }
-
 }
