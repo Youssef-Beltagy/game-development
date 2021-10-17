@@ -29,11 +29,11 @@
     - Pressing space reverses rotation direction
       - The game is not easy if you limit the number of lives and enable Enemy3
   - Background: FigherJet from Pexels.com
-  - Second Scene:
+  - Second Scene (Switch between Scenes by pressing N):
     - Hit space while the ball and bar collides to score a point
     - Miss the ball and you lose a life (3 in total)
     - Game over when you lose all lives
     - Hit the space bar to reverse your direction
     - Score and lives are printed at the top
-  - Switch between Scenes by pressing N
   - Game Over Scene
+  - Pressing N allows you to try the games again too.
