@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MP2Core.unity
     guid: eec2a55620e572e4e9e2183acbb4b4a0
+  - enabled: 1
+    path: Assets/Scenes/ExtraCredit.unity
+    guid: ee0e199ccdad37346b1b550cb34fcb0f
+  - enabled: 1
+    path: Assets/Scenes/GameOver.unity
+    guid: 4aec1f9ebbd71144b96f68ea9cb777ea
   m_configObjects: {}
