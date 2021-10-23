@@ -39,6 +39,7 @@ git clean -e Examples -f -d -x
 
 ## TODO
 
+- Go through tutorial's point tutorial
 - Read Unity Architecture: https://www.google.com/search?q=unity+architecture&rlz=1C1CHBF_enUS918US918&oq=unity+archi&aqs=chrome.2.0i433i512j69i57j0i512l5j69i65.5323j0j7&sourceid=chrome&ie=UTF-8
 - Start making a library of common movements.
 - Learn C#
