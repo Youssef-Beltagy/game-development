@@ -10,5 +10,5 @@
   - Enemies that spawn bullets in a rotational manner
   - Cooldown bar
   - Better UI
-  - Explosion sound and UI FX
+  - Explosion sound and visual effects
 

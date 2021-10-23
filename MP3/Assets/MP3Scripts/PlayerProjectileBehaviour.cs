@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EggBehaviour : MonoBehaviour
+public class PlayerProjectileBehaviour : MonoBehaviour
 {
 
     public float speed = 40;
@@ -24,9 +24,9 @@ public class EggBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name != Data.ENEMY_NAME) return;
-
-        StateManager.destroyEgg(gameObject);
+        if (collision.gameObject.name == Data.ENEMY_NAME ||
+            collision.gameObject.name == Data.WAYPOINT_NAME)
+                StateManager.destroyEgg(gameObject);
     }
 
 }

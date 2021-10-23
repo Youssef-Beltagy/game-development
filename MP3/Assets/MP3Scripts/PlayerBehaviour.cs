@@ -28,12 +28,12 @@ public class PlayerBehaviour : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space) && eggTimer.aquire())
         {
-            StateManager.instantiateEgg(transform.position + transform.up * (2 / transform.up.magnitude), transform.rotation, false);
+            StateManager.instantiateEgg(transform.position + transform.up * (2 / transform.up.magnitude), transform.rotation, Data.ObjectTypes.Egg);
         }
 
         if (Input.GetKey(KeyCode.B) && bombTimer.aquire())
         {
-            StateManager.instantiateEgg(transform.position + transform.up * (2 / transform.up.magnitude), transform.rotation, true);
+            StateManager.instantiateEgg(transform.position + transform.up * (2 / transform.up.magnitude), transform.rotation, Data.ObjectTypes.Bomb);
         }
 
     }
@@ -54,10 +54,20 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.name == Data.ENEMY_NAME) StateManager.playerEnemyCollision(gameObject);
+    }
 
-        if (collision.gameObject.name != Data.ENEMY_NAME) return;
+    public float getCoolDownRatioForProjectile(Data.ObjectTypes type)
+    {
+        switch (type)
+        {
+            case (Data.ObjectTypes.Egg):
+                return eggTimer.getRemainingTimeRatio();
+            case (Data.ObjectTypes.Bomb):
+                return bombTimer.getRemainingTimeRatio();
+        }
 
-        StateManager.playerCollision(gameObject);
+        return 0;
     }
 
 }

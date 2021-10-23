@@ -1,14 +1,26 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBehaviour : MonoBehaviour
+public class WayPointBehaviour : MonoBehaviour
 {
-    
-    public int health = 4;
-    public bool changeColor = false;
+    public Vector2 initialPosition;
+    public Vector2 deltas;
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        GetComponent<Rigidbody2D>().freezeRotation = true;
+    }
+
+    void respawn()
+    {
+
+    }
+
+
+    //TODO: Fix this function
+    //TODO: Abstract away the alpha-channel logic
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.name == Data.PLAYER_NAME)
@@ -16,9 +28,10 @@ public class EnemyBehaviour : MonoBehaviour
             destroyAndRespwan(collision.gameObject);
             return;
         }
-        
-        
-        if (collision.gameObject.name != Data.PLAYER_PROJECTILE_NAME){
+
+
+        if (collision.gameObject.name != Data.PLAYER_PROJECTILE_NAME)
+        {
             return;
         }
 
@@ -32,18 +45,12 @@ public class EnemyBehaviour : MonoBehaviour
 
         Color color;
         int colorIndex = Data.colors.Length - health;
-        colorIndex = colorIndex < 0 ? 0 : colorIndex; 
+        colorIndex = colorIndex < 0 ? 0 : colorIndex;
         if (changeColor) color = Data.colors[colorIndex];
         else color = GetComponent<Renderer>().material.color;
 
         color.a = GetComponent<Renderer>().material.color.a * 0.8f;
 
         GetComponent<Renderer>().material.color = color;
-    }
-
-    private void destroyAndRespwan(GameObject ga)
-    {
-        StateManager.instantiateEnemy();
-        StateManager.destroyEnemy(gameObject, ga);
     }
 }

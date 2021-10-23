@@ -4,28 +4,39 @@ using UnityEngine.SceneManagement;
 public class StateManager : MonoBehaviour
 {
 
-    public static Data.PlayerMode playerMode = Data.PlayerMode.Mouse;
-    public static int enemiesCreated = 0;
-    public static int enemiesDestroyed = 0;
-    public static int enemiesDestroyedByPlayer = 0;
-    public static int eggCount = 0;
+    public static Data.PlayerMode playerMode;
+    public static int enemiesCreated;
+    public static int enemiesDestroyed;
+    public static int enemiesDestroyedByPlayer;
+    public static int eggCount;
 
-    public static int maxPlayerLives = 3;
+    public readonly static int maxPlayerLives = 3;
     public static int playerLives;
 
     private static CameraBehaviour cameraBehaviour;
+    private static SwitchScene sceneSwitcher;
+
+    public WayPointBehaviour[] __wayPoints = new GameObject[7];
+    public static WayPointBehaviour[] wayPoints;
+
 
     // Start is called before the first frame update
     void Awake()
     {
-        playerMode = Data.PlayerMode.Mouse;
+        playerMode = Data.PlayerMode.Default;
+
         enemiesCreated = 0;
         enemiesDestroyed = 0;
         enemiesDestroyedByPlayer = 0;
         eggCount = 0;
 
-        cameraBehaviour = Camera.main.GetComponent<CameraBehaviour>();
         playerLives = maxPlayerLives;
+
+        cameraBehaviour = Camera.main.GetComponent<CameraBehaviour>();
+        sceneSwitcher = Camera.main.GetComponent<SwitchScene>();
+
+        wayPoints = __wayPoints;
+
     }
 
     // Update is called once per frame
@@ -42,6 +53,10 @@ public class StateManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2)) playerMode ^= Data.PlayerMode.EnableEnemy2;
 
         if (Input.GetKeyDown(KeyCode.Alpha3)) playerMode ^= Data.PlayerMode.EnableEnemy3;
+
+        if (Input.GetKeyDown(KeyCode.J)) playerMode ^= Data.PlayerMode.WayPointSequence;
+
+        if (Input.GetKeyDown(KeyCode.H)) playerMode ^= Data.PlayerMode.HideWaypoints;
 
     }
 
@@ -86,15 +101,26 @@ public class StateManager : MonoBehaviour
         return "Prefabs/Enemy1";
     }
 
-    public static void instantiateEgg(Vector3 position, Quaternion orientation, bool bomb)
+    public static void instantiateEgg(Vector3 position, Quaternion orientation, Data.ObjectTypes type)
     {
         eggCount++;
-        string eggType = "Prefabs/Egg";
-        if (bomb) eggType = "Prefabs/Bomb";
-        GameObject e = Instantiate(Resources.Load(eggType) as GameObject);
+        GameObject e = Instantiate(Resources.Load(choosePlayerProjectile(type)) as GameObject);
         e.transform.position = position;
         e.transform.rotation = orientation;
-        e.name = Data.EGG_NAME;
+        e.name = Data.PLAYER_PROJECTILE_NAME;
+    }
+
+    private static string choosePlayerProjectile(Data.ObjectTypes type)
+    {
+        switch (type)
+        {
+            case (Data.ObjectTypes.Egg):
+                return "Prefabs/Egg";
+            case (Data.ObjectTypes.Bomb):
+                return "Prefabs/Bomb";
+        }
+
+        return "Prefabs/Egg";
     }
 
 
@@ -116,7 +142,7 @@ public class StateManager : MonoBehaviour
         return cameraBehaviour.pointInWorld(point);
     }
 
-    public static void playerCollision(GameObject player)
+    public static void playerEnemyCollision(GameObject player)
     {
         if ((StateManager.playerMode & Data.PlayerMode.FewLives) == 0) return;
 
@@ -124,7 +150,7 @@ public class StateManager : MonoBehaviour
         if (playerLives > 0) return;
 
         Destroy(player);
-        SceneManager.LoadScene(2);
+        sceneSwitcher.loadGameOverScene();
     }
 
 }

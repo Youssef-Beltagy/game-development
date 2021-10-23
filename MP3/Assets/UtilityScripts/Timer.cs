@@ -17,4 +17,14 @@ public class Timer
         lastSpawnTime = Time.time;
         return true;
     }
+
+    public float getRemainingTime()
+    {
+        return Mathf.Max(0f, lastSpawnTime + spawnRate - Time.time);
+    }
+
+    public float getRemainingTimeRatio()
+    {
+        return getRemainingTime() / spawnRate;
+    }
 }

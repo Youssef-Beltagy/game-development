@@ -3,16 +3,25 @@ using UnityEngine.SceneManagement;
 
 public class SwitchScene : MonoBehaviour
 {
-    public int num_scenes = 2;
+    public int numScenes = 2;
+    public int gameOverSceneIndex = 3;
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.N)) loadNextScene();
+    }
+
+    public void loadNextScene()
+    {
         int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
-        if (nextScene == 3) nextScene = 0;
+        nextScene %= numScenes;
 
-        nextScene %= num_scenes;
-
-        if (Input.GetKeyDown(KeyCode.N))
+        if (nextScene == gameOverSceneIndex) nextScene = 0;
             SceneManager.LoadScene(nextScene);
+    }
+
+    public void loadGameOverScene()
+    {
+        SceneManager.LoadScene(gameOverSceneIndex);
     }
 
 }
