@@ -37,4 +37,4 @@
     - Score and lives are printed at the top
   - Game Over Scene
   - Pressing N allows you to try the games again too.
-- [MP2](MP3/)
+- [MP3](MP3/)
