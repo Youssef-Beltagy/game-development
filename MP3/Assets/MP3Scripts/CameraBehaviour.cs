@@ -60,9 +60,28 @@ public class CameraBehaviour : MonoBehaviour
 
     private void UpdateText()
     {
-        eggSlider.value = 1 - playerBehaviour.getCoolDownRatioForProjectile(Data.ObjectTypes.Egg);
-        bombSlider.value = 1 - playerBehaviour.getCoolDownRatioForProjectile(Data.ObjectTypes.Bomb);
         playerHealthSlider.value = ((float)StateManager.playerLives) / ((float)StateManager.maxPlayerLives);
+
+        eggSlider.value = 1 - playerBehaviour.getCoolDownRatioForProjectile(Data.ObjectTypes.Egg);
+        if(eggSlider.value > 0.995f)
+        {
+            eggSlider.gameObject.SetActive(false);
+        }
+        else
+        {
+            eggSlider.gameObject.SetActive(true);
+        }
+
+        bombSlider.value = 1 - playerBehaviour.getCoolDownRatioForProjectile(Data.ObjectTypes.Bomb);
+        if (bombSlider.value > 0.995f)
+        {
+            bombSlider.gameObject.SetActive(false);
+        }
+        else
+        {
+            bombSlider.gameObject.SetActive(true);
+        }
+
         eggCountText.text = StateManager.eggCount.ToString();
 
         enemyCountText.text = (StateManager.enemiesCreated - StateManager.enemiesDestroyed).ToString();

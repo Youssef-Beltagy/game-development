@@ -124,3 +124,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 3
   changeColor: 1
+  chase: 1
+  rotationSpeed: 0.03
+  movementSpeed: 20

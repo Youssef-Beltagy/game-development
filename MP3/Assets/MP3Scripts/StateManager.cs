@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class StateManager : MonoBehaviour
 {
@@ -16,8 +15,8 @@ public class StateManager : MonoBehaviour
     private static CameraBehaviour cameraBehaviour;
     private static SwitchScene sceneSwitcher;
 
-    public WayPointBehaviour[] __wayPoints = new GameObject[7];
-    public static WayPointBehaviour[] wayPoints;
+    public GameObject[] __wayPoints = new GameObject[6];
+    public static GameObject[] wayPoints;
 
 
     // Start is called before the first frame update
@@ -56,7 +55,16 @@ public class StateManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.J)) playerMode ^= Data.PlayerMode.WayPointSequence;
 
-        if (Input.GetKeyDown(KeyCode.H)) playerMode ^= Data.PlayerMode.HideWaypoints;
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            playerMode ^= Data.PlayerMode.HideWaypoints;
+
+            for (int i = 0; i < wayPoints.Length; i++)
+            {
+                wayPoints[i].SetActive((playerMode & Data.PlayerMode.HideWaypoints) == 0);
+            }
+
+        }
 
     }
 
@@ -87,7 +95,7 @@ public class StateManager : MonoBehaviour
 
     private static string chooseEnemy()
     {
-        switch (((int)Random.Range(0, 9)) % 3)
+        switch (Random.Range(0,3))
         {
             case 0:
                 return "Prefabs/Enemy1";
